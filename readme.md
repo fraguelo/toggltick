@@ -4,6 +4,7 @@
 
 - Toggl: https://toggl.com/app/profile
 - Tick: Tick > Account > Edit Profile
+
  *__USER_AGENT__ [email] should be replaced for any email formatted thing*
 
 ## To run
