@@ -1,0 +1,13 @@
+diff --git a/node_modules/toggl-api/lib/client.js b/node_modules/toggl-api/lib/client.js
+index 9c2511f..46bd1ca 100644
+--- a/node_modules/toggl-api/lib/client.js
++++ b/node_modules/toggl-api/lib/client.js
+@@ -13,7 +13,7 @@ var DEFAULT_INSTANCE = null;
+ var DEFAULTS = {
+   reauth: false,
+   sessionCookie: 'toggl_api_session',
+-  apiUrl: 'https://www.toggl.com',
++  apiUrl: 'https://track.toggl.com',
+   reportsUrl: 'https://toggl.com/reports'
+ };
+ 

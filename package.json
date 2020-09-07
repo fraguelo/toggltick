@@ -6,11 +6,13 @@
   "scripts": {
     "start": "node src/index.js ",
     "start-watch": "nodemon index.js | bunyan",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "patch-package"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "patch-package": "^6.2.2",
     "prompts": "^2.3.2",
     "tickspotv2-api": "^1.1.0",
     "toggl-api": "^1.0.1"
