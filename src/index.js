@@ -53,17 +53,25 @@ function getTaskId(taskName) {
 
 function getTimeEntries({ startDate, endDate }) {
   toggl.getTimeEntries(startDate, endDate, (err, rawEntries) => {
-    rawEntries.forEach(async ({ start, duration, description, tags }) => {
-      const entry = {
-        task_id: getTaskId(tags[0]),
-        notes: description,
-        name: tags[0],
-        hours: duration / 3600,
-        date: start,
-      };
+    rawEntries.forEach(async ({ start, duration, description, tags, pid }) => {
+      await toggl.getProjectData(pid, async (errProject, projectData) => {
+        const { cid: clientId, name: projectName } = projectData;
 
-      const { date, notes, hours } = await tick.createEntry(entry);
-      console.log("saved :>> ", { date, notes, hours });
+        await toggl.getClientData(clientId, async (errClient, clientData) => {
+          const { name: clientName } = clientData;
+
+          const entry = {
+            task_id: getTaskId(tags[0]),
+            notes: `[${clientName}/${projectName}] ${description}`,
+            name: tags[0],
+            hours: duration / 3600,
+            date: start,
+          };
+
+          const { date, notes, hours } = await tick.createEntry(entry);
+          console.log("saved :>> ", { date, notes, hours });
+        });
+      });
     });
   });
 }
