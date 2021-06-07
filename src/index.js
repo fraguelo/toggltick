@@ -58,7 +58,7 @@ function getTimeEntries({ startDate, endDate }) {
         const { cid: clientId, name: projectName } = projectData;
 
         await toggl.getClientData(clientId, async (errClient, clientData) => {
-          const { name: clientName } = clientData;
+          const { name: clientName = '' } = clientData || {};
 
           const entry = {
             task_id: getTaskId(tags[0]),
@@ -68,8 +68,12 @@ function getTimeEntries({ startDate, endDate }) {
             date: start,
           };
 
-          const { date, notes, hours } = await tick.createEntry(entry);
-          console.log("saved :>> ", { date, notes, hours });
+          try {
+            const { date, notes, hours } = await tick.createEntry(entry) || {};
+            console.log("saved :>> ", { date, notes, hours });
+          } catch (error) {
+            console.error(`* ERROR (${entry.notes}): `, error.message);
+          }
         });
       });
     });
