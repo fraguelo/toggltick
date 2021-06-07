@@ -8,6 +8,7 @@ const {
   TICK_USER_AGENT,
   TICK_SUBSCRIPTION_ID,
   TICK_API_TOKEN,
+  TICK_USER_ID,
 } = JSON.parse(fs.readFileSync("conf.json"));
 
 const toggl = new TogglClient({ apiToken: TOGGL_API_TOKEN });
@@ -58,7 +59,7 @@ function getTimeEntries({ startDate, endDate }) {
         const { cid: clientId, name: projectName } = projectData;
 
         await toggl.getClientData(clientId, async (errClient, clientData) => {
-          const { name: clientName } = clientData;
+          const { name: clientName = '' } = clientData || {};
 
           const entry = {
             task_id: getTaskId(tags[0]),
@@ -66,10 +67,15 @@ function getTimeEntries({ startDate, endDate }) {
             name: tags[0],
             hours: duration / 3600,
             date: start,
+            ...(TICK_USER_ID ? { user_id: TICK_USER_ID } : {})
           };
 
-          const { date, notes, hours } = await tick.createEntry(entry);
-          console.log("saved :>> ", { date, notes, hours });
+          try {
+            const { date, notes, hours } = await tick.createEntry(entry) || {};
+            console.log("saved :>> ", { date, notes, hours });
+          } catch (error) {
+            console.error(`* ERROR (${entry.notes}): `, error.message);
+          }
         });
       });
     });

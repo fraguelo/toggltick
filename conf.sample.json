@@ -2,5 +2,6 @@
   "TOGGL_API_TOKEN": "",
   "TICK_USER_AGENT": "toggltick ([email])",
   "TICK_SUBSCRIPTION_ID": "",
-  "TICK_API_TOKEN": ""
+  "TICK_API_TOKEN": "",
+  "TICK_USER_ID": ""
 }
