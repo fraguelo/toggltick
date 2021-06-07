@@ -8,6 +8,7 @@ const {
   TICK_USER_AGENT,
   TICK_SUBSCRIPTION_ID,
   TICK_API_TOKEN,
+  TICK_USER_ID,
 } = JSON.parse(fs.readFileSync("conf.json"));
 
 const toggl = new TogglClient({ apiToken: TOGGL_API_TOKEN });
@@ -66,6 +67,7 @@ function getTimeEntries({ startDate, endDate }) {
             name: tags[0],
             hours: duration / 3600,
             date: start,
+            ...(TICK_USER_ID ? { user_id: TICK_USER_ID } : {})
           };
 
           try {
