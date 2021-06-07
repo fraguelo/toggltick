@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "patch-package": "^6.2.2",
-    "prompts": "^2.3.2",
+    "patch-package": "^6.4.7",
+    "prompts": "^2.4.1",
     "tickspotv2-api": "^1.1.0",
     "toggl-api": "^1.0.1"
   }
