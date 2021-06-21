@@ -1,44 +1,8 @@
-const fs = require("fs");
-const TogglClient = require("toggl-api");
-const Tickspot = require("tickspotv2-api");
-const prompts = require("prompts");
-
-const {
-  TOGGL_API_TOKEN,
-  TICK_USER_AGENT,
-  TICK_SUBSCRIPTION_ID,
-  TICK_API_TOKEN,
-} = JSON.parse(fs.readFileSync("conf.json"));
-
-const toggl = new TogglClient({ apiToken: TOGGL_API_TOKEN });
-const tick = new Tickspot(
-  TICK_USER_AGENT,
-  TICK_SUBSCRIPTION_ID,
-  TICK_API_TOKEN
-);
+const { toggl, tick } = require("./conf");
+const { buildDate } = require("./lib");
+const { getPrompts, datePrompt } = require("./prompts");
 
 let tasks = [];
-
-function buildDate(date) {
-  try {
-    let amountDays = 1;
-    if (date.includes("+")) {
-      amountDays = Number(date.split("+")[1]);
-      date = date.split("+")[0];
-    }
-    const spDate = date.split("-");
-    const currentDate = new Date();
-    const day = Number(spDate[0]);
-    const month = spDate[1] ? Number(spDate[1]) - 1 : currentDate.getMonth();
-    const year = spDate[2] || currentDate.getFullYear();
-    const startDate = new Date(Date.UTC(year, month, day));
-    const endDate = new Date(Date.UTC(year, month, day + amountDays));
-
-    return { startDate, endDate };
-  } catch (error) {
-    console.error("Check the date format!");
-  }
-}
 
 async function getTickTasks() {
   return (await tick.getTasks()).map(({ id, name }) => ({
@@ -78,13 +42,8 @@ async function upload({ startDate, endDate }) {
 }
 
 async function start() {
-  const response = await prompts({
-    type: "text",
-    name: "date",
-    message:
-      "Insert a date in any format (dd, dd-mm,  dd-mm-yyyy) add '+' for amount of days (dd+5)",
-  });
-  upload(buildDate(response.date));
+  const { date } = await getPrompts([datePrompt]);
+  upload(buildDate(date));
 }
 
 start();

@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js ",
+    "hours": "node src/getHours.js ",
     "start-watch": "nodemon index.js | bunyan",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
